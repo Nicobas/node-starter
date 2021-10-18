@@ -1,0 +1,45 @@
+{
+  "name": "node-starter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=15.0.0"
+  },
+  "scripts": {
+    "api": "node_modules/.bin/nodemon src/services/api/api.js",
+    "setup-dev": "pm2 deploy config/deploy.config.js dev setup",
+    "deploy-dev": "pm2 deploy config/deploy.config.js dev update --force"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "celebrate": "^15.0.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "figlet": "^1.5.2",
+    "fs-readdir-recursive": "^1.1.0",
+    "helmet": "^4.6.0",
+    "http": "^0.0.1-security",
+    "joi-objectid": "^4.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.11",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7",
+    "rand-token": "^1.0.1",
+    "regex-escape": "^3.4.10",
+    "require-dir": "^1.2.0",
+    "winston": "^3.3.3",
+    "winston-console-format": "^1.0.8",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.13",
+    "prettier": "^2.4.1",
+    "yarn": "^1.22.15"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "watch": [
+    "src/"
+  ],
+  "ignore": [
+    "**/*.log",
+    "**/*scsslint*.js"
+  ],
+  "ext": "js json",
+  "delay": 500
+}

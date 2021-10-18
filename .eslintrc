@@ -1,0 +1,37 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:node/recommended",
+        "prettier"
+    ],
+    "plugins": [
+        "eslint-plugin-prettier"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "no-console": 1,
+        "node/no-unpublished-require": 0,
+        "require-atomic-updates": 0,
+        "prettier/prettier": [
+            "error",
+            {
+                "semi": true,
+                "trailingComma": "all",
+                "singleQuote": true,
+                "printWidth": 120,
+                "tabWidth": 4
+            }
+        ]
+    }
+}
