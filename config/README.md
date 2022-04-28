@@ -1,7 +1,6 @@
 # Configuration
 
 ## Fonctionnement
-Les fichiers de configuration se trouvent dans le dossier `./config`.
 
 Chaque environnement utilise 3 fichiers de configuration :
 - `config.js` : il contient la configuration commune à tous les environnements

@@ -13,13 +13,13 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 
 - **Node.js** pour l'exécution des services
 - **Mongoose** pour la gestion de la bdd
-- **Express** pour construire les APIs
+- **Express.js** pour construire les APIs
 - **Joi** pour la validation des données
 - **Bcrypt** pour la gestion des mots de passe
 - **JWT** pour l'authentification
-- **Winston** pour logger l'application
+- **Winston** pour logger l'application (couplé a morgan pour Express)
 - **Yarn** pour la gestion des modules
-- **ESLint** pour la propreté du code
+- **ESLint** pour la qualité du code
 - **Docker** et **Docker Compose** pour conteneuriser l'ensemble
 
 ### Données
