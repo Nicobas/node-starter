@@ -1,12 +1,12 @@
 const http = require('http');
 const logger = require('winston');
 
-module.exports = async (ms) => {
+module.exports = async () => {
     logger.info('[HTTP] Initializing');
 
-    const { app } = ms;
+    const { app } = SERVICE;
 
     logger.info('[HTTP] Initializing http without ssl');
 
-    ms.httpServer = http.createServer(app);
+    SERVICE.httpServer = http.createServer(app);
 };

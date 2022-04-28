@@ -1,0 +1,9 @@
+# Inherits from docker-compose.yml (via cli)
+
+version: "3.5"
+services:
+  api:
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: yarn run api:debug

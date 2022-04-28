@@ -1,0 +1,39 @@
+version: "3.5"
+services:
+  api:
+    container_name: node-starter_api
+    build: .
+    links:
+      - mongo
+      - redis
+    ports:
+      - "3000:3000"
+    environment:
+      - CONFIG_NAME
+      - CONFIG_PASSWORD
+    command: yarn run api
+
+  mongo:
+    container_name: node-starter_mongo
+    image: bitnami/mongodb:4.4
+    environment:
+      - MONGODB_DISABLE_SYSTEM_LOG=true
+      - MONGODB_SYSTEM_LOG_VERBOSITY=0
+    volumes:
+      - ./tmp/mongo_data:/bitnami/mongodb
+    ports:
+      - '27018:27017'
+    logging:
+      driver: none
+
+  redis:
+    container_name: node-starter_redis
+    image: bitnami/redis:6.2
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./tmp/redis_data:/bitnami/redis/data
+    ports:
+      - '6379:6379'
+    logging:
+      driver: none

@@ -13,8 +13,8 @@
         "eslint-plugin-prettier"
     ],
     "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "CONFIG": "readonly",
+        "SERVICE": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018

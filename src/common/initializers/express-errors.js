@@ -1,12 +1,10 @@
 const logger = require('winston');
 const { errors } = require('celebrate');
 
-const CONFIG = require('../../../config/config');
-
-module.exports = (ms) => {
+module.exports = () => {
     logger.info('[EXPRESS ERRORS] Handle body-parser errors');
 
-    const { app } = ms;
+    const { app } = SERVICE;
 
     app.use((err, req, res, next) => {
         if (err instanceof SyntaxError && err.status >= 400 && err.status < 500 && err.message.indexOf('JSON')) {
@@ -42,7 +40,7 @@ module.exports = (ms) => {
     app.use((err, req, res, next) => {
         //-- laisser le next sinon erreur express
         const status = err.status || 500;
-        if (CONFIG.common.env_type === 'dev') {
+        if (CONFIG.env_type !== 'dev') {
             res.status(status).json({
                 message: err.message,
                 error: err.stack,

@@ -1,6 +1,6 @@
 //-- 200 Ok
 
-//-- ne pas utiliser sauf exeption (ex: forest)
+//-- ne pas utiliser sauf exception (ex: forest)
 const response200 = (res, body) => {
     res.status(200).json(body);
 };
@@ -47,13 +47,13 @@ const response201WithDataAndMessage = (res, data, message) => {
 
 //-- 204 No Content
 
-const response204 = res => {
+const response204 = (res) => {
     res.status(204).send();
 };
 
 //-- 400 Bad Request
 
-//-- ne pas utiliser sauf exeption (ex: forest)
+//-- ne pas utiliser sauf exception (ex: forest)
 const response400 = (res, body) => {
     res.status(400).json(body);
 };

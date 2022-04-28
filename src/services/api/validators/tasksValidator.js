@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const CONFIG = require('../../../../config/config');
+const { tasks_status } = CONFIG.settings;
 
 const createTask = celebrate({
     body: Joi.object().keys({
@@ -8,7 +8,7 @@ const createTask = celebrate({
         description: Joi.string(),
         dueDate: Joi.date(),
         status: Joi.string()
-            .valid(...CONFIG.common.settings.tasks_status)
+            .valid(...tasks_status)
             .required(),
     }),
 });
@@ -16,7 +16,7 @@ const createTask = celebrate({
 const getTasks = celebrate({
     query: Joi.object().keys({
         search: Joi.string(),
-        status: Joi.string().valid(...CONFIG.common.settings.tasks_status),
+        status: Joi.string().valid(...tasks_status),
         limit: Joi.number().integer().min(1).max(50).default(20),
         offset: Joi.number().integer().min(0).default(0),
     }),
@@ -36,7 +36,7 @@ const updateTask = celebrate({
         title: Joi.string(),
         description: Joi.string(),
         dueDate: Joi.date(),
-        status: Joi.string().valid(...CONFIG.common.settings.tasks_status),
+        status: Joi.string().valid(...tasks_status),
     }),
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const randomToken = require('rand-token');
 
 const BASE10 = '0123456789';

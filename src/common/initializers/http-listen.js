@@ -1,7 +1,5 @@
 const logger = require('winston');
 
-const CONFIG = require('../../../config/config');
-
 const listen = async (server, port) => {
     return new Promise((resolve) => {
         server.listen(port, () => {
@@ -10,10 +8,10 @@ const listen = async (server, port) => {
     });
 };
 
-module.exports = async (ms) => {
-    const { serviceName, httpServer } = ms;
+module.exports = async () => {
+    const { serviceName, httpServer } = SERVICE;
 
-    const httpConfig = CONFIG.common.services[serviceName].http;
+    const httpConfig = CONFIG.services[serviceName].http;
 
     if (!httpConfig) {
         throw new Error('Microservice need http config');

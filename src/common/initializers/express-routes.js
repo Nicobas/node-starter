@@ -3,10 +3,10 @@ const express = require('express');
 const read = require('fs-readdir-recursive');
 const path = require('path');
 
-module.exports = (ms) => {
+module.exports = () => {
     logger.info('[EXPRESS ROUTES] Initializing routes');
 
-    const { app, serviceName } = ms;
+    const { app, serviceName } = SERVICE;
 
     const directory = '../../services/' + serviceName + '/routes/';
 

@@ -1,4 +1,4 @@
-const microservice = require('../../common/initializers/microservice');
+const service = require('../../common/initializers/_service');
 
 const mongoose = require('../../common/initializers/mongoose');
 const express = require('../../common/initializers/express');
@@ -10,4 +10,4 @@ const httpListen = require('../../common/initializers/http-listen');
 
 const initializers = [mongoose, express, expressStatus, expressRoutes, expressErrors, http, httpListen];
 
-microservice.init('api', initializers);
+service.init('api', initializers);

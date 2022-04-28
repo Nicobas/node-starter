@@ -1,7 +1,6 @@
 const logger = require('winston');
 
-const CONFIG = require('../../../config/config');
-
-if (CONFIG.common.logs.debug) {
+if (CONFIG.logs.debug) {
+    // eslint-disable-next-line no-console
     console.log = logger.debug;
 }

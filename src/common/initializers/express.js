@@ -5,14 +5,12 @@ const logger = require('winston');
 const helmet = require('helmet');
 const compression = require('compression');
 
-const CONFIG = require('../../../config/config');
-
-module.exports = (ms) => {
+module.exports = () => {
     logger.info('[EXPRESS] Initializing');
 
-    const { serviceName } = ms;
+    const { serviceName } = SERVICE;
 
-    const httpConfig = CONFIG.common.services[serviceName].http;
+    const httpConfig = CONFIG.services[serviceName].http;
 
     if (!httpConfig) {
         throw new Error('Microservice need http config');
@@ -22,23 +20,16 @@ module.exports = (ms) => {
 
     logger.info('[EXPRESS] Initializing req/res');
 
+    app.enable('trust proxy');
+
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', '*');
         res.header('Access-Control-Allow-Headers', '*');
 
-        if (httpConfig.is_nginx_proxy_enabled && !req.headers['x-forwarded-for']) {
-            logger.warn('Proxy X-Forwarded-For header unknown');
-            req.clientIp = req.connection.remoteAddress;
-            res.status(407).json();
-            return;
-        } else if (httpConfig.is_nginx_proxy_enabled) {
-            req.clientIp = req.headers['x-forwarded-for'];
-        } else {
-            req.clientIp = req.connection.remoteAddress;
-        }
-
+        req.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         req.currentDate = new Date();
+
         next();
     });
 
@@ -48,7 +39,7 @@ module.exports = (ms) => {
         return req.clientIp;
     });
 
-    app.use(morgan(CONFIG.common.env_type === 'dev' ? 'dev' : 'short', { stream: logger.stream }));
+    app.use(morgan(CONFIG.env_type !== 'prod' ? 'dev' : 'short', { stream: logger.stream }));
 
     logger.info('[EXPRESS] Initializing security and compression');
 
@@ -66,5 +57,5 @@ module.exports = (ms) => {
     app.use(helmet());
     app.use(compression());
 
-    ms.app = app;
+    SERVICE.app = app;
 };

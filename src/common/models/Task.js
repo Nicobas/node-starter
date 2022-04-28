@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const CONFIG = require('../../../config/config');
-
 const { Schema, ObjectId } = mongoose;
 
 const TaskSchema = new Schema(
@@ -17,7 +15,7 @@ const TaskSchema = new Schema(
         },
         status: {
             type: String,
-            enum: CONFIG.common.settings.tasks_status,
+            enum: CONFIG.settings.tasks_status,
             default: 'Todo',
         },
         _author: {

@@ -1,10 +1,7 @@
 const logger = require('winston');
 const { createLogger, format, transports } = logger;
 
-require('winston-daily-rotate-file');
 const { consoleFormat } = require('winston-console-format');
-
-const CONFIG = require('../../../config/config');
 
 const customLevels = {
     levels: {
@@ -20,7 +17,7 @@ const customFormat = format.printf(({ level, message, timestamp }) => {
     return `${timestamp} ${level}: ${message}`;
 });
 
-module.exports = (ms) => {
+module.exports = () => {
     logger.clear();
 
     logger.configure({
@@ -34,21 +31,7 @@ module.exports = (ms) => {
         },
     };
 
-    if (CONFIG.common.logs.file) {
-        const transportDailyFile = new logger.transports.DailyRotateFile({
-            level: 'info',
-            format: format.combine(format.timestamp(), customFormat),
-            filename: '%DATE%.log',
-            dirname: CONFIG.server.paths.logs + ms.serviceName + '/logs/',
-            datePattern: 'YYYY-MM-DD',
-            maxFiles: '365d',
-            handleExceptions: true,
-        });
-
-        logger.add(transportDailyFile);
-    }
-
-    if (CONFIG.common.logs.console) {
+    if (CONFIG.logs.console) {
         const transportConsole = new logger.transports.Console({
             format: format.combine(format.timestamp(), customFormat),
             handleExceptions: true,
@@ -58,7 +41,7 @@ module.exports = (ms) => {
         logger.add(transportConsole);
     }
 
-    if (CONFIG.common.logs.debug) {
+    if (CONFIG.logs.debug) {
         const transportDebug = createLogger({
             level: 'silly',
             format: format.combine(

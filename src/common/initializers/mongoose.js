@@ -1,24 +1,30 @@
 const logger = require('winston');
 const mongoose = require('mongoose');
-const requiredir = require('require-dir');
 
-const CONFIG = require('../../../config/config');
+const mongooseConnect = async (uri, options) => {
+    return new Promise((resolve, reject) => {
+        mongoose.Promise = global.Promise;
+        mongoose.connect(uri, options, (err) => {
+            err ? reject(err) : resolve();
+        });
+    });
+};
 
-module.exports = (ms) => {
+module.exports = async () => {
     logger.info('[MONGOOSE] Connection to mongodb');
 
-    if (!CONFIG.common.authentication_credentials.mongodb_uri) {
+    const { uri } = CONFIG.credentials.mongodb;
+
+    if (!uri) {
         throw new Error('Microservice needs mongodb credentials');
     }
 
-    mongoose.Promise = global.Promise;
-    mongoose.connect(CONFIG.common.authentication_credentials.mongodb_uri, {
+    await mongooseConnect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
 
     logger.info('[MONGOOSE] Load models');
 
-    const path = '../models/';
-    requiredir(path);
+    require('../models/index');
 };

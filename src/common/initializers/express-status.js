@@ -1,10 +1,9 @@
 const logger = require('winston');
-const CONFIG = require('../../../config/config');
 
-module.exports = (ms) => {
+module.exports = () => {
     logger.info('[EXPRESS STATUS] Initializing status route');
 
-    const { app, serviceName } = ms;
+    const { app, serviceName } = SERVICE;
 
     const startDate = new Date();
 
@@ -21,9 +20,8 @@ module.exports = (ms) => {
         res.status(200).json({
             status: 'UP',
             service: serviceName,
-            server_name: CONFIG.server.id,
-            env_type: CONFIG.common.env_type,
-            env_name: CONFIG.common.env_name,
+            env_type: CONFIG.env_type,
+            env_name: CONFIG.env_name,
             uptime: uptime,
             uptime_ms: currentDate.getTime() - startDate.getTime(),
             date: currentDate.toString(),

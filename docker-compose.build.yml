@@ -1,0 +1,10 @@
+# Build docker-compose for Gitlab Runner
+
+version: "3.5"
+services:
+  node-starter:
+    image: '${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}'
+    build:
+      context: .
+      cache_from:
+        - '${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}'
