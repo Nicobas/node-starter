@@ -2,7 +2,8 @@
   "restartable": "rs",
   "verbose": true,
   "watch": [
-    "src/"
+    "src/",
+    "config/"
   ],
   "ignore": [
     "**/*.log",

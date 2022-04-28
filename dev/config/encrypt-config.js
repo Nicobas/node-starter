@@ -13,8 +13,8 @@ const run = async () => {
     const env = await readAsync({ prompt: 'CONFIG_NAME : ' });
     const password = await readAsync({ prompt: 'CONFIG_PASSWORD : ', silent: true });
 
-    const fileIn = 'config/config.' + env + '.js';
-    const fileOut = 'config/config.' + env + '.js.enc';
+    const fileIn = 'config/config.' + env + '.secret.js';
+    const fileOut = 'config/config.' + env + '.secret.js.enc';
 
     const key = crypto.createHash('sha256').update(String(password)).digest('base64').substr(0, 32);
 

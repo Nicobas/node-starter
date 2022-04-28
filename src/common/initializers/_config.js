@@ -6,6 +6,29 @@ const dotenv = require('dotenv');
 
 const algorithm = 'aes-256-ctr';
 
+const mergeDeep = (target, source) => {
+    const isObject = (obj) => obj && typeof obj === 'object';
+
+    if (!isObject(target) || !isObject(source)) {
+        return source;
+    }
+
+    Object.keys(source).forEach((key) => {
+        const targetValue = target[key];
+        const sourceValue = source[key];
+
+        if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+            target[key] = targetValue.concat(sourceValue);
+        } else if (isObject(targetValue) && isObject(sourceValue)) {
+            target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+        } else {
+            target[key] = sourceValue;
+        }
+    });
+
+    return target;
+};
+
 module.exports = async () => {
     dotenv.config();
 
@@ -20,23 +43,24 @@ module.exports = async () => {
         throw new Error('CONFIG_PASSWORD env variable is missing');
     }
 
-    const config_path = 'config/config.' + env_name + '.js.enc';
+    const commonConfig = require('../../../config/config');
+    const envConfig = require('../../../config/config.' + env_name);
+
+    const secretEnvConfigPath = 'config/config.' + env_name + '.secret.js.enc';
 
     const key = crypto.createHash('sha256').update(String(env_password)).digest('base64').substr(0, 32);
 
-    const buffer = await fs.readFile(config_path);
+    const buffer = await fs.readFile(secretEnvConfigPath);
 
     const iv = buffer.slice(0, 16);
     const encrypted = buffer.slice(16);
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
-    let config;
-
     try {
         const buffer = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-        config = eval(buffer.toString());
+        const secretEnvConfig = eval(buffer.toString());
 
-        global.CONFIG = config;
+        global.CONFIG = mergeDeep(mergeDeep(commonConfig, envConfig), secretEnvConfig);
     } catch (e) {
         console.error('CONFIG_PASSWORD env variable is not valid');
         process.exit(1);

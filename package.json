@@ -6,8 +6,8 @@
     "node": "16.13.x"
   },
   "scripts": {
-    "project:debug": "docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build",
-    "project": "docker compose -f docker-compose.yml up --build",
+    "project:debug": "docker compose -f docker-compose.local.yml -f docker-compose.local.debug.yml up --build",
+    "project": "docker compose -f docker-compose.local.yml up --build",
     "api": "node src/services/api/api.js",
     "api:debug": "./node_modules/.bin/nodemon -L src/services/api/api.js",
     "lint": "node_modules/.bin/eslint .",

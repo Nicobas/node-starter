@@ -41,7 +41,7 @@ package-lock.json
 /.idea/
 
 # Config
-/config/config.*.js
+/config/config.*.secret.js
 .env
 
 # Tmp
