@@ -1,6 +1,6 @@
 # node-starter
 
-Ce projet peut servir comme base pour un projet Node.js en microservices
+Ce projet est un starter Node.js en JavaScript pour développer des services web
 
 Il contient des exemples de microservices qui peuvent être adaptés au besoin
 
@@ -35,9 +35,9 @@ Les services sont lancés dans des conteneurs avec Docker et Docker compose
 2. Configurer les variables d'environnement (voir section "Configuration" ci-dessous)
 3. Lancer l'ensemble des services :
 
-`docker compose -f docker-compose.yml up --build` alias `yarn run project` ou
+`yarn run project` ou
 
-`docker compose -f docker-compose.debug.yml up --build` alias `yarn run project:debug` (utilise nodemon)
+`yarn run project:debug` (hot reload via nodemon)
 
 ## Configuration
 
