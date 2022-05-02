@@ -15,15 +15,13 @@ const register = async (req, res) => {
     const isUsernameUsed = await User.findOne({ username: username }, '_id');
 
     if (isUsernameUsed) {
-        response400WithMessage(res, 'Username is already used');
-        return;
+        return response400WithMessage(res, 'Username is already used');
     }
 
     const isEmailUsed = await User.findOne({ email: email }, '_id');
 
     if (isEmailUsed) {
-        response400WithMessage(res, 'Email is already used');
-        return;
+        return response400WithMessage(res, 'Email is already used');
     }
 
     const registerMode = 'Email';

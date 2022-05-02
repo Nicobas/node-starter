@@ -19,13 +19,11 @@ const login = async (req, res) => {
     const user = await User.findOne(filters, '_id password_hash');
 
     if (!user) {
-        response400WithMessage(res, 'Authentication failed');
-        return;
+        return response400WithMessage(res, 'Authentication failed');
     }
 
     if (!(await comparePassword(password, user.password_hash))) {
-        response400WithMessage(res, 'Authentication failed');
-        return;
+        return response400WithMessage(res, 'Authentication failed');
     }
 
     user.last_authentication_date = req.currentDate;
@@ -50,15 +48,13 @@ const refreshToken = async (req, res) => {
     const decodedRefreshToken = await verifyUserRefreshToken(req.body.refreshToken);
 
     if (!decodedRefreshToken) {
-        response400WithMessage(res, 'Refresh token failed');
-        return;
+        return response400WithMessage(res, 'Refresh token failed');
     }
 
     const user = await User.findOne({ status: 'Active', _id: decodedRefreshToken.sub }, '_id');
 
     if (!user) {
-        response400WithMessage(res, 'Refresh token failed');
-        return;
+        return response400WithMessage(res, 'Refresh token failed');
     }
 
     user.last_authentication_date = req.currentDate;

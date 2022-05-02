@@ -6,6 +6,7 @@ services:
     links:
       - mongo
       - redis
+      - s3
     ports:
       - "3000:3000"
     environment:
@@ -19,6 +20,7 @@ services:
     links:
       - mongo
       - redis
+      - s3
     environment:
       - CONFIG_NAME
       - CONFIG_PASSWORD
@@ -30,6 +32,7 @@ services:
     links:
       - mongo
       - redis
+      - s3
     environment:
       - CONFIG_NAME
       - CONFIG_PASSWORD
@@ -57,5 +60,18 @@ services:
       - ./tmp/redis_data:/bitnami/redis/data
     ports:
       - '6380:6379'
+    logging:
+      driver: none
+
+  s3:
+    container_name: node-starter_s3
+    image: bitnami/minio:2022.4.30
+    environment:
+      - MINIO_DEFAULT_BUCKETS=node-starter
+    volumes:
+      - ./tmp/s3_data:/data
+    ports:
+      - '9000:9000'
+      - '9001:9001'
     logging:
       driver: none

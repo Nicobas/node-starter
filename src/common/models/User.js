@@ -28,6 +28,14 @@ const UserSchema = new Schema(
             type: String,
             enum: ['Email'],
         },
+        avatar: {
+            bucket: {
+                type: String,
+            },
+            key: {
+                type: String,
+            },
+        },
     },
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
 );

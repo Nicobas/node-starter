@@ -1,5 +1,6 @@
 const logger = require('winston');
 const { errors } = require('celebrate');
+const { MulterError } = require('multer');
 
 const initializer = () => {
     return async () => {
@@ -12,6 +13,19 @@ const initializer = () => {
                 res.status(400).json({
                     message: 'Bad body json format',
                     error: 'Bad body json format',
+                });
+            } else {
+                next(err);
+            }
+        });
+
+        logger.info('[EXPRESS ERRORS] Handle mutler errors');
+
+        app.use((err, req, res, next) => {
+            if (err instanceof MulterError) {
+                res.status(400).json({
+                    message: 'File error : ' + err.message,
+                    error: 'File error : ' + err.message,
                 });
             } else {
                 next(err);
