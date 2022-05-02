@@ -24,6 +24,8 @@ const init = async (serviceName, initializers) => {
         serviceName: serviceName,
     };
 
+    const serviceNameUpperCase = serviceName.toUpperCase();
+
     await configInit();
     await loggerInit();
     await prototypesInit();
@@ -31,8 +33,8 @@ const init = async (serviceName, initializers) => {
     try {
         showServiceTitle(serviceName);
 
-        logger.info('-------- ' + serviceName.toUpperCase() + ' --------');
-        logger.info('[' + serviceName.toUpperCase() + '] Starting initialization');
+        logger.info('-------- ' + serviceNameUpperCase + ' --------');
+        logger.info('[' + serviceNameUpperCase + '] Starting initialization');
         logger.info('[CONFIG] Loaded');
         logger.info('[LOGGER] Initialized');
 
@@ -54,10 +56,10 @@ const init = async (serviceName, initializers) => {
             await item();
         });
 
-        logger.info('[' + serviceName.toUpperCase() + '] Initialized SUCCESSFULLY');
+        logger.info('[' + serviceNameUpperCase + '] Initialized SUCCESSFULLY');
     } catch (err) {
         logger.error(err.stack || err);
-        logger.info('[' + serviceName.toUpperCase() + '] Initialisation FAILED');
+        logger.info('[' + serviceNameUpperCase + '] Initialisation FAILED');
     }
 };
 
