@@ -29,7 +29,7 @@ const mergeDeep = (target, source) => {
     return target;
 };
 
-module.exports = async () => {
+const initializer = async () => {
     dotenv.config();
 
     const env_name = process.env.CONFIG_NAME;
@@ -66,3 +66,5 @@ module.exports = async () => {
         process.exit(1);
     }
 };
+
+module.exports = initializer;

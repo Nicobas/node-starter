@@ -46,10 +46,17 @@ const deleteTask = celebrate({
     }),
 });
 
+const generateTaskReport = celebrate({
+    params: Joi.object().keys({
+        taskId: Joi.objectId().required(),
+    }),
+});
+
 module.exports = {
     createTask,
     getTasks,
     getTask,
     updateTask,
     deleteTask,
+    generateTaskReport,
 };

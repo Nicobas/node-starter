@@ -1,5 +1,5 @@
-const validator = require('../validators/authValidator');
-const controller = require('../controllers/authController');
+const validator = require('../validators/auth.validator');
+const controller = require('../controllers/auth.controller');
 
 module.exports = (router) => {
     router.route('/login').post(validator.login, controller.login);

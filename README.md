@@ -6,10 +6,10 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 
 ## Services
 - **api** : API REST gérée par Express avec validation de données Joi. Elle contient un register, un login, un profil et un crud (task list)
+- **cron** : Microservice qui permet d'exécuter tâches à des heures ou des jours spécifiques
+- **worker** : Microservices qui permet d'exécuter des tâches déportées (gourmandes en ressources par exemple), les tâches sont ajoutées par d'autres services dans une file d'attente, on peut multiplier les instances de ce service traiter plus de tâches en parallèle
 
-[//]: # (- **cron** : Microservice qui permet d'exécuter tâches à des heures ou des jours spécifiques)
 [//]: # (- **socket** : Service WebSocket &#40;Socket.io&#41; qui vient en complément de l'API pour ajouter de la communication temps réel avec le client)
-[//]: # (- **worker** : Microservices qui permet d'exécuter des tâches déportées &#40;gourmandes en ressources par exemple&#41;, les tâches sont ajoutées par d'autres services dans une file d'attente, on peut multiplier les instances de ce service traiter plus de tâches en parallèle)
 
 ## Technologies
 
@@ -21,6 +21,8 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 - **Joi** pour la validation des données
 - **Bcrypt** pour la gestion des mots de passe
 - **JWT** pour l'authentification
+- **Node Schedule** pour gérer les cron
+- **Bee Queue** pour gérer les files d'attentes des workers via Redis
 - **Winston** pour logger l'application (couplé a morgan pour Express)
 - **Yarn** pour la gestion des modules
 - **ESLint** pour la qualité du code

@@ -1,8 +1,8 @@
-const validator = require('../validators/tasksValidator');
-const controller = require('../controllers/tasksController');
+const validator = require('../validators/tasks.validator');
+const controller = require('../controllers/tasks.controller');
 
-const { authenticateUser } = require('../middlewares/authenticate');
-const { loadTaskFromParams } = require('../middlewares/tasks');
+const { authenticateUser } = require('../middlewares/authenticate.middleware');
+const { loadTaskFromParams } = require('../middlewares/tasks.middleware');
 
 module.exports = (router) => {
     router.route('/').post(validator.createTask, authenticateUser('username'), controller.createTask);
@@ -30,4 +30,8 @@ module.exports = (router) => {
     router
         .route('/:taskId')
         .delete(validator.deleteTask, authenticateUser(), loadTaskFromParams('_author'), controller.deleteTask);
+
+    router
+        .route('/:taskId/generateReport')
+        .post(validator.generateTaskReport, authenticateUser(), loadTaskFromParams(''), controller.generateTaskReport);
 };

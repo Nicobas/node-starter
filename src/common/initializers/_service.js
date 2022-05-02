@@ -1,12 +1,25 @@
 const logger = require('winston');
+const figlet = require('figlet');
 
 const configInit = require('./_config');
 const loggerInit = require('./_logger');
 const prototypesInit = require('./_prototypes');
 
-const figletHelper = require('../helpers/figletHelper');
+const showServiceTitle = (serviceName) => {
+    //eslint-disable-next-line no-console
+    console.info('\n');
 
-module.exports.init = async (serviceName, initializers) => {
+    const title = figlet.textSync(CONFIG.project_name.toUpperCase() + ' ' + serviceName.toUpperCase(), {
+        font: 'Doom',
+        horizontalLayout: 'default',
+        verticalLayout: 'default',
+    });
+
+    //eslint-disable-next-line no-console
+    console.info(title);
+};
+
+const init = async (serviceName, initializers) => {
     global.SERVICE = {
         serviceName: serviceName,
     };
@@ -16,7 +29,7 @@ module.exports.init = async (serviceName, initializers) => {
     await prototypesInit();
 
     try {
-        figletHelper.showServiceTitle(serviceName);
+        showServiceTitle(serviceName);
 
         logger.info('-------- ' + serviceName.toUpperCase() + ' --------');
         logger.info('[' + serviceName.toUpperCase() + '] Starting initialization');
@@ -46,4 +59,8 @@ module.exports.init = async (serviceName, initializers) => {
         logger.error(err.stack || err);
         logger.info('[' + serviceName.toUpperCase() + '] Initialisation FAILED');
     }
+};
+
+module.exports = {
+    init,
 };

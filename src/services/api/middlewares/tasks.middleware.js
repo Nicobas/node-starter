@@ -1,6 +1,6 @@
 const { response404WithMessage, response500WithMessage } = require('../../../common/helpers/expressResHelper');
 
-const Task = require('../../../common/models/Task');
+const { Task } = require('../../../common/models');
 
 const loadTaskFromParams = (fields = '') => {
     return async (req, res, next) => {

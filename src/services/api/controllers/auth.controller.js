@@ -1,12 +1,12 @@
 const { response201WithData, response400WithMessage } = require('../../../common/helpers/expressResHelper');
 const {
-    signUserAuthToken,
+    signUserAccessToken,
     signUserRefreshToken,
     verifyUserRefreshToken,
 } = require('../../../common/helpers/jwtHelper');
 const { comparePassword } = require('../../../common/helpers/cryptoHelper');
 
-const User = require('../../../common/models/User');
+const { User } = require('../../../common/models');
 
 const login = async (req, res) => {
     const { identifier, password } = req.body;
@@ -31,7 +31,7 @@ const login = async (req, res) => {
     user.last_authentication_date = req.currentDate;
     await user.save();
 
-    const { authToken, authExpiration } = await signUserAuthToken(user);
+    const { accessToken, accessExpiration } = await signUserAccessToken(user);
     const { refreshToken, refreshExpiration } = await signUserRefreshToken(user);
 
     response201WithData(res, {
@@ -39,8 +39,8 @@ const login = async (req, res) => {
             id: user._id,
             status: user.status,
         },
-        authToken,
-        authExpiration,
+        accessToken,
+        accessExpiration,
         refreshToken,
         refreshExpiration,
     });
@@ -54,7 +54,7 @@ const refreshToken = async (req, res) => {
         return;
     }
 
-    const user = await User.findOne({ status: 'Active', _id: decodedRefreshToken.userId }, '_id');
+    const user = await User.findOne({ status: 'Active', _id: decodedRefreshToken.sub }, '_id');
 
     if (!user) {
         response400WithMessage(res, 'Refresh token failed');
@@ -64,15 +64,15 @@ const refreshToken = async (req, res) => {
     user.last_authentication_date = req.currentDate;
     await user.save();
 
-    const { authToken, authExpiration } = await signUserAuthToken(user);
+    const { accessToken, accessExpiration } = await signUserAccessToken(user);
     const { refreshToken, refreshExpiration } = await signUserRefreshToken(user);
 
     response201WithData(res, {
         user: {
             id: user._id,
         },
-        authToken,
-        authExpiration,
+        accessToken,
+        accessExpiration,
         refreshToken,
         refreshExpiration,
     });

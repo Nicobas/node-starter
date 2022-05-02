@@ -1,7 +1,7 @@
-const validator = require('../validators/meValidator');
-const controller = require('../controllers/meController');
+const validator = require('../validators/me.validator');
+const controller = require('../controllers/me.controller');
 
-const { authenticateUser } = require('../middlewares/authenticate');
+const { authenticateUser } = require('../middlewares/authenticate.middleware');
 
 module.exports = (router) => {
     router

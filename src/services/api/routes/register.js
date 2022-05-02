@@ -1,5 +1,5 @@
-const validator = require('../validators/registerValidator');
-const controller = require('../controllers/registerController');
+const validator = require('../validators/register.validator');
+const controller = require('../controllers/register.controller');
 
 module.exports = (router) => {
     router.route('/').post(validator.register, controller.register);

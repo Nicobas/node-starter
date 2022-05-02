@@ -10,21 +10,25 @@ const mongooseConnect = async (uri, options) => {
     });
 };
 
-module.exports = async () => {
-    logger.info('[MONGOOSE] Connection to mongodb');
+const initializer = () => {
+    return async () => {
+        logger.info('[MONGOOSE] Connection to mongodb');
 
-    const { uri } = CONFIG.credentials.mongodb;
+        const { uri } = CONFIG.credentials.mongodb;
 
-    if (!uri) {
-        throw new Error('Microservice needs mongodb credentials');
-    }
+        if (!uri) {
+            throw new Error('Microservice needs mongodb credentials');
+        }
 
-    await mongooseConnect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+        await mongooseConnect(uri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
 
-    logger.info('[MONGOOSE] Load models');
+        logger.info('[MONGOOSE] Load models');
 
-    require('../models/index');
+        require('../models/index');
+    };
 };
+
+module.exports = initializer;

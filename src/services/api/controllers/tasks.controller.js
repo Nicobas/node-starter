@@ -5,10 +5,10 @@ const {
     response201WithData,
     response204,
     response403WithMessage,
+    response201WithMessage,
 } = require('../../../common/helpers/expressResHelper');
 
-const Task = require('../../../common/models/Task');
-const User = require('../../../common/models/User');
+const { Task, User } = require('../../../common/models');
 
 const createTask = async (req, res) => {
     const { title, description, dueDate, status } = req.body;
@@ -151,10 +151,22 @@ const deleteTask = async (req, res) => {
     response204(res);
 };
 
+const generateTaskReport = async (req, res) => {
+    const job = SERVICE.queues.worker.createJob({
+        type: 'tasks.generateReport',
+        taskId: req.task.id,
+    });
+
+    await job.save();
+
+    response201WithMessage(res, 'Report generation has been queued');
+};
+
 module.exports = {
     createTask,
     getTasks,
     getTask,
     updateTask,
     deleteTask,
+    generateTaskReport,
 };

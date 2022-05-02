@@ -13,6 +13,28 @@ services:
       - CONFIG_PASSWORD
     command: yarn run api
 
+  cron:
+    container_name: node-starter_cron
+    build: .
+    links:
+      - mongo
+      - redis
+    environment:
+      - CONFIG_NAME
+      - CONFIG_PASSWORD
+    command: yarn run cron
+
+  worker:
+    container_name: node-starter_worker
+    build: .
+    links:
+      - mongo
+      - redis
+    environment:
+      - CONFIG_NAME
+      - CONFIG_PASSWORD
+    command: yarn run worker
+
   mongo:
     container_name: node-starter_mongo
     image: bitnami/mongodb:4.4
@@ -34,6 +56,6 @@ services:
     volumes:
       - ./tmp/redis_data:/bitnami/redis/data
     ports:
-      - '6379:6379'
+      - '6380:6379'
     logging:
       driver: none

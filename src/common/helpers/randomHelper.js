@@ -11,10 +11,10 @@ const BASE62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const BASE66 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._~';
 const BASE71 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!'()*-._~";
 
-const DEFAULT_TOKEN_SIZE = 30;
+const DEFAULT_TOKEN_SIZE = 20;
 
-const generateToken = (size) => {
-    return randomToken.generate(size || DEFAULT_TOKEN_SIZE, BASE62);
+const generateToken = (size = DEFAULT_TOKEN_SIZE) => {
+    return randomToken.generate(size, BASE62);
 };
 
 module.exports = {

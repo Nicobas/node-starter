@@ -7,3 +7,15 @@ services:
       - .:/app
       - /app/node_modules
     command: yarn run api:debug
+
+  cron:
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: yarn run cron:debug
+
+  worker:
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: yarn run worker:debug

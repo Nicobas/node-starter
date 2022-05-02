@@ -5,57 +5,61 @@ const logger = require('winston');
 const helmet = require('helmet');
 const compression = require('compression');
 
-module.exports = () => {
-    logger.info('[EXPRESS] Initializing');
+const initializer = () => {
+    return async () => {
+        logger.info('[EXPRESS] Initializing');
 
-    const { serviceName } = SERVICE;
+        const { serviceName } = SERVICE;
 
-    const httpConfig = CONFIG.services[serviceName].http;
+        const httpConfig = CONFIG.services[serviceName].http;
 
-    if (!httpConfig) {
-        throw new Error('Microservice need http config');
-    }
+        if (!httpConfig) {
+            throw new Error('Microservice need http config');
+        }
 
-    const app = express();
+        const app = express();
 
-    logger.info('[EXPRESS] Initializing req/res');
+        logger.info('[EXPRESS] Initializing req/res');
 
-    app.enable('trust proxy');
+        app.enable('trust proxy');
 
-    app.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', '*');
-        res.header('Access-Control-Allow-Headers', '*');
+        app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Methods', '*');
+            res.header('Access-Control-Allow-Headers', '*');
 
-        req.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        req.currentDate = new Date();
+            req.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+            req.currentDate = new Date();
 
-        next();
-    });
+            next();
+        });
 
-    logger.info('[EXPRESS] Initializing logger');
+        logger.info('[EXPRESS] Initializing logger');
 
-    morgan.token('remote-addr', (req) => {
-        return req.clientIp;
-    });
+        morgan.token('remote-addr', (req) => {
+            return req.clientIp;
+        });
 
-    app.use(morgan(CONFIG.env_type !== 'prod' ? 'dev' : 'short', { stream: logger.stream }));
+        app.use(morgan(CONFIG.env_type !== 'prod' ? 'dev' : 'short', { stream: logger.stream }));
 
-    logger.info('[EXPRESS] Initializing security and compression');
+        logger.info('[EXPRESS] Initializing security and compression');
 
-    let bodyParserConfig = {
-        extended: true,
+        let bodyParserConfig = {
+            extended: true,
+        };
+
+        if (httpConfig.max_request_body_size) {
+            bodyParserConfig.limit = httpConfig.max_request_body_size;
+        }
+
+        app.use(bodyParser.json(bodyParserConfig));
+        app.use(bodyParser.urlencoded({ ...bodyParserConfig, extended: true }));
+
+        app.use(helmet());
+        app.use(compression());
+
+        SERVICE.app = app;
     };
-
-    if (httpConfig.max_request_body_size) {
-        bodyParserConfig.limit = httpConfig.max_request_body_size;
-    }
-
-    app.use(bodyParser.json(bodyParserConfig));
-    app.use(bodyParser.urlencoded({ ...bodyParserConfig, extended: true }));
-
-    app.use(helmet());
-    app.use(compression());
-
-    SERVICE.app = app;
 };
+
+module.exports = initializer;

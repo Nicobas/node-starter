@@ -5,31 +5,31 @@ const jwt_sign = util.promisify(jwt.sign);
 const jwt_verify = util.promisify(jwt.verify);
 
 const { secret } = CONFIG.credentials.jwt;
-const { user_auth_jwt_lifetime, user_refresh_jwt_lifetime } = CONFIG.settings;
+const { user_access_jwt_lifetime, user_refresh_jwt_lifetime } = CONFIG.settings;
 
-const signUserAuthToken = async (user) => {
+const signUserAccessToken = async (user) => {
     const currentDate = new Date();
     const expiration = Math.floor(
-        currentDate.setSeconds(currentDate.getSeconds() + user_auth_jwt_lifetime).valueOf() / 1000,
+        currentDate.setSeconds(currentDate.getSeconds() + user_access_jwt_lifetime).valueOf() / 1000,
     );
 
     const payload = {
-        type: 'userAuth',
-        userId: user._id,
+        type: 'userAccess',
+        sub: user._id,
         exp: expiration,
     };
 
     return {
-        authToken: await jwt_sign(payload, secret),
-        authExpiration: new Date(expiration * 1000),
+        accessToken: await jwt_sign(payload, secret),
+        accessExpiration: new Date(expiration * 1000),
     };
 };
 
-const verifyUserAuthToken = async (token) => {
+const verifyUserAccessToken = async (token) => {
     try {
         const decoded = await jwt_verify(token, secret);
 
-        if (decoded.type !== 'userAuth') {
+        if (decoded.type !== 'userAccess') {
             return null;
         }
 
@@ -47,7 +47,7 @@ const signUserRefreshToken = async (user) => {
 
     const payload = {
         type: 'userRefresh',
-        userId: user._id,
+        sub: user._id,
         exp: expiration,
     };
 
@@ -72,8 +72,8 @@ const verifyUserRefreshToken = async (token) => {
 };
 
 module.exports = {
-    signUserAuthToken,
-    verifyUserAuthToken,
+    signUserAccessToken,
+    verifyUserAccessToken,
     signUserRefreshToken,
     verifyUserRefreshToken,
 };

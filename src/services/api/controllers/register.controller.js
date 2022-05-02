@@ -7,7 +7,7 @@ const {
 
 const { hashPassword } = require('../../../common/helpers/cryptoHelper');
 
-const User = require('../../../common/models/User');
+const { User } = require('../../../common/models');
 
 const register = async (req, res) => {
     const { username, email, password } = req.body;

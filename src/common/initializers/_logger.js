@@ -17,7 +17,7 @@ const customFormat = format.printf(({ level, message, timestamp }) => {
     return `${timestamp} ${level}: ${message}`;
 });
 
-module.exports = () => {
+const initializer = () => {
     logger.clear();
 
     logger.configure({
@@ -75,3 +75,5 @@ module.exports = () => {
         logger.add(transportDebug);
     }
 };
+
+module.exports = initializer;
