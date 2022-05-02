@@ -24,6 +24,7 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 - **Node Schedule** pour gérer les cron
 - **Bee Queue** pour gérer les files d'attentes des workers via Redis
 - **AWS SDK** pour gérer l'accès au bucket S3
+- **Jimp** pour le traitement des images
 - **Winston** pour logger l'application (couplé a morgan pour Express)
 - **Yarn** pour la gestion des modules
 - **ESLint** pour la qualité du code
@@ -33,7 +34,7 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 
 - **MongoDB** pour la base de donnée du projet
 - **Redis** pour la mémoire partagée entre les services
-- **S3** pour stocker et télécharger les fichiers (AWS ou autre)
+- **S3** pour stocker et télécharger les fichiers (Minio en local)
 
 ## Comment lancer le projet ?
 

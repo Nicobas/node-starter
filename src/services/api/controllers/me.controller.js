@@ -1,5 +1,5 @@
 const moment = require('moment');
-const mime = require('mime-types');
+const Jimp = require('jimp');
 
 const {
     response200WithData,
@@ -33,11 +33,21 @@ const setAvatar = async (req, res) => {
         return response400WithMessage(res, 'File is missing');
     }
 
-    const fileName = generateToken() + '.' + mime.extension(file.mimetype);
+    let imageBuffer;
+
+    try {
+        const image = await Jimp.read(req.file.buffer);
+        image.cover(500, 500).quality(60);
+        imageBuffer = await image.getBufferAsync(Jimp.MIME_JPEG);
+    } catch (e) {
+        return response400WithMessage(res, 'File cannot be read as a picture');
+    }
+
+    const fileName = generateToken() + '.jpeg';
 
     const key = CONFIG.env_name + '/avatars/' + moment(req.currentDate).format('YYYY-MM-DD') + '/' + fileName;
 
-    await uploadFileFromBuffer(upload_bucket, key, file.buffer, file.mimetype);
+    await uploadFileFromBuffer(upload_bucket, key, imageBuffer, file.mimetype);
 
     req.me.avatar = {
         bucket: upload_bucket,
