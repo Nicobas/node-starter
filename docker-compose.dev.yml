@@ -141,5 +141,5 @@ services:
       - "--accesslog=true"
       - "--tracing=true"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=nicobas@example.com"
+      - "--certificatesresolvers.myresolver.acme.email=bnicolas.pro@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
