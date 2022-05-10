@@ -104,9 +104,20 @@ services:
       - .env.dev
     volumes:
       - /srv/data/minio:/data
+    expose:
+      - "9000"
     ports:
-      - '9000:9000'
       - '9001:9001'
+    labels:
+      - "traefik.port=9000"
+      - "traefik.http.routers.s3_http.rule=Host(`s3.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.s3_http.entrypoints=web"
+      - "traefik.http.routers.s3_http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.s3.rule=Host(`s3.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.s3.entrypoints=websecure"
+      - "traefik.http.routers.s3.tls=true"
+      - "traefik.http.routers.s3.tls.certresolver=myresolver"
 
   reverse-proxy:
     container_name: node-starter_reverse-proxy
