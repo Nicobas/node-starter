@@ -41,9 +41,12 @@ package-lock.json
 /.idea/
 
 # Config
-/config/config.*.js
+/config/config.*.secret.js
 .env
 .env.*
+
+# Example files
+!*.example
 
 # Tmp
 /dev/tmp
