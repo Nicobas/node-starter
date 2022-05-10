@@ -33,7 +33,7 @@ build:
 
 deploy_dev:
   stage: deploy
-  image: alpine
+  image: docker/compose
   variables:
     DOMAIN: dev.starter.nicobas.io
     DOCKER_HOST: ssh://debian@$DOMAIN
@@ -48,7 +48,7 @@ deploy_dev:
   script:
     - echo "$ENV_DEV" > .env.dev
 #    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker compose -f docker-compose.dev.yml up -d
+    - docker-compose -f docker-compose.dev.yml up -d
   only:
     - dev
   environment:
