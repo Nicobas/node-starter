@@ -19,3 +19,9 @@ services:
       - .:/app
       - /app/node_modules
     command: yarn run worker:debug
+
+  socket:
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: yarn run socket:debug

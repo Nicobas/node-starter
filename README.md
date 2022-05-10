@@ -8,8 +8,7 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 - **api** : API REST gérée par Express avec validation de données Joi. Elle contient un register, un login, un profil et un crud (task list)
 - **cron** : Microservice qui permet d'exécuter tâches à des heures ou des jours spécifiques
 - **worker** : Microservices qui permet d'exécuter des tâches déportées (gourmandes en ressources par exemple), les tâches sont ajoutées par d'autres services dans une file d'attente, on peut multiplier les instances de ce service traiter plus de tâches en parallèle
-
-[//]: # (- **socket** : Service WebSocket &#40;Socket.io&#41; qui vient en complément de l'API pour ajouter de la communication temps réel avec le client)
+- **socket** : Service WebSocket (Socket.io) qui vient en complément de l'API pour ajouter de la communication temps réel avec le client
 
 ## Technologies
 
@@ -34,7 +33,7 @@ Il contient des exemples de microservices qui peuvent être adaptés au besoin
 
 - **MongoDB** pour la base de donnée du projet
 - **Redis** pour la mémoire partagée entre les services
-- **S3** pour stocker et télécharger les fichiers (Minio en local)
+- **S3** pour stocker et télécharger les fichiers (MinIO en local)
 
 ## Comment lancer le projet ?
 
@@ -59,7 +58,7 @@ Les services sont lancés dans des conteneurs avec Docker et Docker compose
 
 ## Todo
 
-- [ ] Ajouter le service socket
+- [ ] Ajouter no de tel à l'inscription avec validation
 - [ ] Ajouter le CI/CD Gitlab avec déploiement d'un environnement de dev
 - [ ] Documenter l'ensemble
 - [ ] Héberger une version de démo

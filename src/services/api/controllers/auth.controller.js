@@ -1,10 +1,10 @@
-const { response201WithData, response400WithMessage } = require('../../../common/helpers/expressResHelper');
+const { response201WithData, response400WithMessage } = require('../../../common/helpers/expressRes.helper');
 const {
     signUserAccessToken,
     signUserRefreshToken,
     verifyUserRefreshToken,
-} = require('../../../common/helpers/jwtHelper');
-const { comparePassword } = require('../../../common/helpers/cryptoHelper');
+} = require('../../../common/helpers/jwt.helper');
+const { comparePassword } = require('../../../common/helpers/crypto.helper');
 
 const { User } = require('../../../common/models');
 

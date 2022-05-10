@@ -18,6 +18,10 @@ const TaskSchema = new Schema(
             enum: CONFIG.settings.tasks_status,
             default: 'Todo',
         },
+        _project: {
+            type: ObjectId,
+            ref: 'Project',
+        },
         _author: {
             type: ObjectId,
             ref: 'User',

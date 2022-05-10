@@ -14,7 +14,7 @@ module.exports = (router) => {
         .get(
             validator.getTask,
             authenticateUser(),
-            loadTaskFromParams('title description due_date status _author'),
+            loadTaskFromParams('title description due_date status _project _author'),
             controller.getTask,
         );
 
@@ -23,13 +23,18 @@ module.exports = (router) => {
         .put(
             validator.updateTask,
             authenticateUser(),
-            loadTaskFromParams('title description due_date status _author'),
+            loadTaskFromParams('title description due_date status _project _author'),
             controller.updateTask,
         );
 
     router
         .route('/:taskId')
-        .delete(validator.deleteTask, authenticateUser(), loadTaskFromParams('_author'), controller.deleteTask);
+        .delete(
+            validator.deleteTask,
+            authenticateUser(),
+            loadTaskFromParams('_project _author'),
+            controller.deleteTask,
+        );
 
     router
         .route('/:taskId/generateReport')

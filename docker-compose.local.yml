@@ -7,11 +7,11 @@ services:
       - mongo
       - redis
       - s3
-    ports:
-      - "3000:3000"
     environment:
       - CONFIG_NAME
       - CONFIG_PASSWORD
+    ports:
+      - "3000:3000"
     command: yarn run api
 
   cron:
@@ -37,6 +37,20 @@ services:
       - CONFIG_NAME
       - CONFIG_PASSWORD
     command: yarn run worker
+
+  socket:
+    container_name: node-starter_socket
+    build: .
+    links:
+      - mongo
+      - redis
+      - s3
+    environment:
+      - CONFIG_NAME
+      - CONFIG_PASSWORD
+    ports:
+      - "3001:3001"
+    command: yarn run socket
 
   mongo:
     container_name: node-starter_mongo

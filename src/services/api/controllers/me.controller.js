@@ -5,9 +5,9 @@ const {
     response200WithData,
     response201WithData,
     response400WithMessage,
-} = require('../../../common/helpers/expressResHelper');
-const { generateToken } = require('../../../common/helpers/randomHelper');
-const { uploadFileFromBuffer, getFileSignedUrl } = require('../../../common/helpers/s3Helper');
+} = require('../../../common/helpers/expressRes.helper');
+const { generateToken } = require('../../../common/helpers/random.helper');
+const { uploadFileFromBuffer, getFileSignedUrl } = require('../../../common/helpers/s3.helper');
 
 const { upload_bucket } = CONFIG.credentials.s3;
 

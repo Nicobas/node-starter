@@ -1,4 +1,4 @@
-const { response404WithMessage, response500WithMessage } = require('../../../common/helpers/expressResHelper');
+const { response404WithMessage, response500WithMessage } = require('../../../common/helpers/expressRes.helper');
 
 const { Task } = require('../../../common/models');
 

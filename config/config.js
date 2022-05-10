@@ -21,5 +21,13 @@ module.exports = {
                 concurrency: 1,
             },
         },
+        socket: {
+            http: {
+                port: 3001,
+            },
+            queue: {
+                concurrency: 1,
+            },
+        },
     },
 };

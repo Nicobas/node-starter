@@ -3,9 +3,9 @@ const {
     response201WithData,
     response400,
     response400WithMessage,
-} = require('../../../common/helpers/expressResHelper');
+} = require('../../../common/helpers/expressRes.helper');
 
-const { hashPassword } = require('../../../common/helpers/cryptoHelper');
+const { hashPassword } = require('../../../common/helpers/crypto.helper');
 
 const { User } = require('../../../common/models');
 

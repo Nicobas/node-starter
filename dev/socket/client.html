@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+    <title>Socket client Example</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
+
+    <script src='https://cdn.socket.io/4.4.1/socket.io.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js'></script>
+
+</head>
+
+<body>
+<div class='container'>
+    <div class='row'>
+        <p>
+        <h2>Client de test pour le service socket</h2>
+        <br />
+        Ce service utilise le framework socket.io v4 (<a href='https://socket.io/docs/v4'>https://socket.io/docs/v4</a>)
+        pour la gestion des websockets.
+        <br />
+        Il permet de s’abonner aux événements des projets pour être informé des modifications de tâches<br />
+        <br />
+        Pour comprendre le fonctionnement et utiliser ce formulaire de test, <b>vous pouvez vous référer au code source
+        commenté de cette page.</b>
+        <br />
+        Les réponses du serveur s’affichent dans l’encadré en bas de la page et dans la console<br />
+        <br />
+        <form>
+            <div class='form-group'>
+                <label for='host'>Host : </label>
+                <input class='form-control' id='host' type='text' value='http://localhost:3001' />
+            </div>
+            <div class='form-group'>
+                <label for='clientAuthToken'>Authorization token : </label>
+
+                <input class='form-control' id='clientAuthToken' type='text' value='' placeholder='JWT ey...' />
+            </div>
+
+            <div class='col-md-12 text-center'>
+                <button id='connect' type='button' class='btn btn-success'>Connect</button>
+                <button id='disconnect' type='button' style='margin-left: 10px' class='btn btn-danger'>Disconnect
+                </button>
+                <button id='ding' type='button' style='margin-left: 10px' class='btn btn-info'>Ding</button>
+            </div>
+        </form>
+        <form>
+            <div class='form-group'>
+                <label for='host'>Project id : </label>
+                <input class='form-control' id='projectId' type='text' value=''
+                       placeholder='626fe2962709494ee5bf2b03' />
+            </div>
+
+            <div class='col-md-12 text-center'>
+                <button id='subscribe' type='button' class='btn btn-success'>Subscribe</button>
+                <button id='unsubscribe' type='button' style='margin-left: 10px' class='btn btn-danger'>Unsubscribe
+                </button>
+            </div>
+
+        </form>
+
+        <div class='col-md-12 panel panel-default' style='border-style: solid; border-color: gray; margin-top: 50px'>
+            <div class='panel-body' id='messages'></div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+<script type='text/javascript'>
+    let socket;
+    let interval;
+    let editor;
+
+    const sleep = m => new Promise(r => setTimeout(r, m));
+
+    const listenEvents = () => {
+        //-- Changement d'une tâche reçue (après abonnement)
+        socket.on('task.change', data => {
+            appendMessages(false, 'task.change', data);
+
+            const responseExample = {
+                action: 'update',
+                task: {
+                    id: '627a37c75ee073781e904816',
+                    title: 'bla',
+                    description: 'blabla',
+                    dueDate: '2023-01-01T00:00:00.000Z',
+                    status: 'Todo',
+                    author: { id: '626fe2962709494ee5bf2b03', username: 'bastien' },
+                },
+            };
+        });
+
+        //-- Erreur lors d'un abonnement
+        socket.on('project.subscribe.error', data => {
+            appendMessages(false, 'project.subscribe.error', data);
+        });
+
+        //-- Abonnement effectué
+        socket.on('project.subscribe.ok', data => {
+            appendMessages(false, 'project.subscribe.ok', data);
+
+            const responseExample = {
+                subscribedProjectIds: ['627a36e45ee073781e9047f4'],
+            };
+        });
+
+        //-- Erreur lors d'un désabonnement
+        socket.on('project.unsubscribe.error', data => {
+            appendMessages(false, 'project.unsubscribe.error', data);
+        });
+
+        //-- Désabonnement effectué
+        socket.on('project.unsubscribe.ok', data => {
+            appendMessages(false, 'project.unsubscribe.ok', data);
+
+            const responseExample = {
+                subscribedProjectIds: [],
+            };
+        });
+
+        //-- erreur de connection (évènement socket.io)
+        socket.on('connect_error', err => {
+            appendMessages(false, 'connect error', err.message);
+        });
+
+        //-- Le client est connecté et authentifié, il peut maintenant s'abonner
+        socket.on('connection.ok', data => {
+            appendMessages(false, 'connection ok', data);
+        });
+
+        //-- Le client est déconnecté (évènement socket.io)
+        socket.on('disconnect', () => {
+            appendMessages(false, 'client disconnected');
+
+            interval && clearInterval(interval);
+            socket = undefined;
+        });
+
+        //-- Le client est connecté (évènement socket.io)
+        socket.on('connect', () => {
+            appendMessages(false, 'client connected');
+        });
+
+        //-- Après l'envoie d'un évènement "ding", le serveur renvoie un évènement "dong" (ping étant réservé par socket.io)
+        socket.on('dong', () => {
+            appendMessages(false, 'dong');
+        });
+    };
+
+    const connectSocket = async () => {
+        if (socket) {
+            disconnectSocket();
+            await sleep(1000);
+        }
+
+        const host = $('#host').val();
+        const clientAuthToken = $('#clientAuthToken').val();
+
+        //-- Connection au service socket avec le meme token que l'api
+        socket = io(host, {
+            auth: {
+                token: clientAuthToken,
+            },
+        });
+
+        //-- écoute des évènements reçus
+        listenEvents();
+    };
+
+    //-- Action de déconnexion du serveur
+    const disconnectSocket = () => {
+        socket && socket.disconnect();
+        interval && clearInterval(interval);
+    };
+
+    //-- Action d'envoi d'un ping au serveur
+    const ding = () => {
+        if (!socket) {
+            return;
+        }
+
+        socket.emit('ding');
+
+        appendMessages(true, 'ding');
+    };
+
+    //-- Action d'abonnement
+    const subscribe = () => {
+        if (!socket) {
+            return;
+        }
+
+        const projectId = $('#projectId').val();
+
+        const emitData = {
+            projectId,
+        };
+
+        socket.emit('project.subscribe', emitData);
+
+        appendMessages(true, 'project.subscribe', emitData);
+    };
+
+    //-- Action de désabonnement
+    const unsubscribe = () => {
+        if (!socket) {
+            return;
+        }
+
+        const projectId = $('#projectId').val();
+
+        const emitData = {
+            projectId,
+        };
+
+        socket.emit('project.unsubscribe', emitData);
+
+        appendMessages(true, 'project.unsubscribe', emitData);
+    };
+
+    const appendMessages = (isEmitted, message, data) => {
+        let text = moment().format('HH:mm:ss.SSS') + ' - ' + message;
+        if (data) {
+            text += ' : ' + JSON.stringify(data);
+        }
+        const color = isEmitted ? 'black' : 'blue';
+        $('#messages').append('<p style="color:' + color + '">' + text + '</p>');
+        console.info(message, data);
+    };
+
+    $('document').ready(() => {
+
+        $('#connect').click(connectSocket);
+        $('#disconnect').click(disconnectSocket);
+        $('#ding').click(ding);
+        $('#subscribe').click(subscribe);
+        $('#unsubscribe').click(unsubscribe);
+    });
+</script>

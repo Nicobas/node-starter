@@ -15,6 +15,7 @@ const initializers = [
     expressStatus(),
     expressRoutes(),
     expressErrors(),
+    queuePush('socket'),
     queuePush('worker'),
     http(),
     httpListen(),

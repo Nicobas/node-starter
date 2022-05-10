@@ -1,5 +1,5 @@
-const { response401WithMessage } = require('../../../common/helpers/expressResHelper');
-const { verifyUserAccessToken } = require('../../../common/helpers/jwtHelper');
+const { response401WithMessage } = require('../../../common/helpers/expressRes.helper');
+const { verifyUserAccessToken } = require('../../../common/helpers/jwt.helper');
 
 const { User } = require('../../../common/models');
 

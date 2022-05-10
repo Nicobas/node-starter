@@ -9,8 +9,8 @@ const processJob = async (job, done) => {
 
     try {
         switch (job.data.type) {
-            case 'tasks.generateReport':
-                await controller.generateReport(job.data);
+            case 'socket.emitTaskChange':
+                await controller.emitTaskChange(job.data);
                 break;
             default:
                 logger.warn('Job type "' + job.data.type + '" not implemented');

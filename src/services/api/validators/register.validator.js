@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const { USERNAME_PATTERN, PASSWORD_PATTERN } = require('../../../common/consts/userConsts');
+const { USERNAME_PATTERN, PASSWORD_PATTERN } = require('../../../common/consts/user.consts');
 
 const register = celebrate({
     body: Joi.object().keys({

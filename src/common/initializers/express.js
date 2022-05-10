@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser'); //... voir si inclut dans express
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const logger = require('winston');
 const helmet = require('helmet');
