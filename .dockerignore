@@ -43,6 +43,7 @@ package-lock.json
 # Config
 /config/config.*.js
 .env
+.env.*
 
 # Tmp
 /dev/tmp

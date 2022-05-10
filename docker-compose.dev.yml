@@ -1,0 +1,134 @@
+version: "3.5"
+services:
+  api:
+    container_name: node-starter_api
+    restart: unless-stopped
+    image: 'gitlab.mob-ion.net:5050/bns/node-starter:dev'
+    links:
+      - mongo
+      - redis
+      - s3
+      - reverse-proxy
+    env_file:
+      - .env.dev
+    expose:
+      - "3000"
+    command: yarn run api
+    labels:
+      - "traefik.port=3000"
+      - "traefik.http.routers.api_http.rule=Host(`api.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.api_http.entrypoints=web"
+      - "traefik.http.routers.api_http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.api.rule=Host(`api.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+
+  cron:
+    container_name: node-starter_cron
+    restart: unless-stopped
+    image: 'gitlab.mob-ion.net:5050/bns/node-starter:dev'
+    links:
+      - mongo
+      - redis
+      - s3
+    env_file:
+      - .env.dev
+    command: yarn run cron
+
+  worker:
+    container_name: node-starter_worker
+    restart: unless-stopped
+    image: 'gitlab.mob-ion.net:5050/bns/node-starter:dev'
+    links:
+      - mongo
+      - redis
+      - s3
+    env_file:
+      - .env.dev
+    command: yarn run worker
+
+  socket:
+    container_name: node-starter_socket
+    restart: unless-stopped
+    image: 'gitlab.mob-ion.net:5050/bns/node-starter:dev'
+    links:
+      - mongo
+      - redis
+      - s3
+      - reverse-proxy
+    env_file:
+      - .env.dev
+    expose:
+      - "3001"
+    command: yarn run socket
+    labels:
+      - "traefik.port=3001"
+      - "traefik.http.routers.socket_http.rule=Host(`socket.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.socket_http.entrypoints=web"
+      - "traefik.http.routers.socket_http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.socket.rule=Host(`socket.dev.starter.nicobas.io`)"
+      - "traefik.http.routers.socket.entrypoints=websecure"
+      - "traefik.http.routers.socket.tls=true"
+      - "traefik.http.routers.socket.tls.certresolver=myresolver"
+
+  mongo:
+    container_name: node-starter_mongo
+    restart: unless-stopped
+    image: bitnami/mongodb:4.4
+    env_file:
+      - .env.dev
+    volumes:
+      - /srv/data/mongo:/bitnami/mongodb
+    ports:
+      - '27017:27017'
+
+  redis:
+    container_name: node-starter_redis
+    restart: unless-stopped
+    image: bitnami/redis:6.2
+    env_file:
+      - .env.dev
+    volumes:
+      - /srv/data/redis:/bitnami/redis/data
+    ports:
+      - '6379:6379'
+
+  s3:
+    container_name: node-starter_s3
+    restart: unless-stopped
+    image: bitnami/minio:2022.4.30
+    env_file:
+      - .env.dev
+    volumes:
+      - /srv/data/minio:/data
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+
+  reverse-proxy:
+    container_name: node-starter_reverse-proxy
+    restart: unless-stopped
+    image: traefik:v2.5
+    env_file:
+      - .env.dev
+    volumes:
+      - /srv/data/traefik/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--accesslog=true"
+      - "--tracing=true"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=nicobas@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"

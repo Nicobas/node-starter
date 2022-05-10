@@ -59,7 +59,7 @@ services:
       - MONGODB_DISABLE_SYSTEM_LOG=true
       - MONGODB_SYSTEM_LOG_VERBOSITY=0
     volumes:
-      - ./tmp/mongo_data:/bitnami/mongodb
+      - ./tmp/data/mongo:/bitnami/mongodb
     ports:
       - '27018:27017'
     logging:
@@ -71,7 +71,7 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
-      - ./tmp/redis_data:/bitnami/redis/data
+      - ./tmp/data/redis:/bitnami/redis/data
     ports:
       - '6380:6379'
     logging:
@@ -83,7 +83,7 @@ services:
     environment:
       - MINIO_DEFAULT_BUCKETS=node-starter
     volumes:
-      - ./tmp/s3_data:/data
+      - ./tmp/data/minio:/data
     ports:
       - '9000:9000'
       - '9001:9001'

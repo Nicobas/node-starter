@@ -43,6 +43,10 @@ package-lock.json
 # Config
 /config/config.*.secret.js
 .env
+.env.*
+
+# Example files
+!*.example
 
 # Tmp
 /dev/tmp

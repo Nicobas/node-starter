@@ -1,6 +1,7 @@
 stages:
   - lint
   - build
+  - deploy
 
 lint:
   stage: lint
@@ -29,3 +30,27 @@ build:
   only:
     - dev
     - main
+
+deploy_dev:
+  stage: deploy
+  image: alpine
+  variables:
+    DOMAIN: dev.starter.nicobas.io
+    DOCKER_HOST: ssh://debian@$DOMAIN
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk update && apk add openssh-client )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $DOMAIN >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - echo "$ENV_DEV" > .env.dev
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker compose -f docker-compose.dev.yml up -d
+  only:
+    - dev
+  environment:
+    name: dev
+    url: "https://api.$DOMAIN/status"
