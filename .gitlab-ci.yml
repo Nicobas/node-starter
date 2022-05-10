@@ -47,7 +47,7 @@ deploy_dev:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - echo "$ENV_DEV" > .env.dev
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker-compose -f docker-compose.dev.yml up -d
   only:
     - dev
