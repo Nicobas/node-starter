@@ -1,0 +1,30 @@
+stages:
+  - lint
+  - build
+
+lint:
+  stage: lint
+  image: node:16.15-alpine
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - yarn install
+  script:
+    - yarn run lint
+
+build:
+  stage: build
+  image: docker/compose
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker-compose -f docker-compose.build.yml pull || true
+    - docker-compose -f docker-compose.build.yml build
+    - docker-compose -f docker-compose.build.yml push
+  only:
+    - main
