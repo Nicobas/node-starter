@@ -33,7 +33,6 @@ const initializer = () => {
             logger.warn('[SOCKET] Redis adapter sub client error : ' + e);
         });
 
-
         io.adapter(createAdapter(pubClient, subClient));
 
         logger.info('[SOCKET] Initializing sockets');
